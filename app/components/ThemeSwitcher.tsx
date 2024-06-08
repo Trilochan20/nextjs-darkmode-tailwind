@@ -1,26 +1,30 @@
 "use client";
-import React from "react";
-import { useThemeContext } from "./ThemeContext";
+
 import {
   HiOutlineSun as SunIcon,
   HiOutlineMoon as MoonIcon,
 } from "react-icons/hi";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 
-const ThemeSwitcher: React.FC = () => {
-  const { theme, setTheme } = useThemeContext();
+export default function ThemeSwitch() {
+  const [mounted, setMounted] = useState(false);
+  const { setTheme, resolvedTheme } = useTheme();
 
-  return (
-    <button
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="p-2 rounded-full"
-    >
-      {theme === "light" ? (
-        <MoonIcon className="h-6 w-6" />
-      ) : (
-        <SunIcon className="h-6 w-6 text-white" />
-      )}
-    </button>
-  );
-};
+  useEffect(() => setMounted(true), []);
 
-export default ThemeSwitcher;
+  if (!mounted) return <>...</>;
+
+  if (resolvedTheme === "dark") {
+    return <SunIcon className="h-6 w-6" onClick={() => setTheme("light")} />;
+  }
+
+  if (resolvedTheme === "light") {
+    return (
+      <MoonIcon
+        className="h-6 w-6 text-gray-900"
+        onClick={() => setTheme("dark")}
+      />
+    );
+  }
+}

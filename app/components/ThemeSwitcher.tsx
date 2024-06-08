@@ -9,17 +9,18 @@ import { useTheme } from "next-themes";
 
 export default function ThemeSwitch() {
   const [mounted, setMounted] = useState(false);
-  const { setTheme, resolvedTheme } = useTheme();
+  const { systemTheme, theme, setTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   useEffect(() => setMounted(true), []);
 
   if (!mounted) return <>...</>;
 
-  if (resolvedTheme === "dark") {
+  if (currentTheme === "dark") {
     return <SunIcon className="h-6 w-6" onClick={() => setTheme("light")} />;
   }
 
-  if (resolvedTheme === "light") {
+  if (currentTheme === "light") {
     return (
       <MoonIcon
         className="h-6 w-6 text-gray-900"
